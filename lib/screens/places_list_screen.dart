@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:provider/provider.dart';
+import '../screens/add_place_screen.dart';
+import '../providers/places_provider.dart';
 
 class PlacesListScreen extends StatelessWidget {
   const PlacesListScreen({super.key});
@@ -12,14 +13,34 @@ class PlacesListScreen extends StatelessWidget {
       centerTitle: true,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () =>
+              Navigator.of(context).pushNamed(AddPlaceScreen.routeName),
           icon: const Icon(Icons.add),
         ),
       ],
     );
     return Scaffold(
       appBar: appBar,
-      body: const Center(child: CircularProgressIndicator()),
+      body: Consumer<PlacesProvider>(
+        child:
+            const Center(child: Text('Got no places yet, start adding some')),
+        builder: (context, placesProvider, child) =>
+            placesProvider.items.isEmpty
+                ? child!
+                : ListView.builder(
+                    itemCount: placesProvider.items.length,
+                    itemBuilder: (context, index) => ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage:
+                            FileImage(placesProvider.items[index].image),
+                      ),
+                      title: Text(placesProvider.items[index].title),
+                      onTap: () {
+                        //TODO: go to detail page
+                      },
+                    ),
+                  ),
+      ),
     );
   }
 }

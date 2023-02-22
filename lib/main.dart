@@ -3,6 +3,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import './providers/places_provider.dart';
 import 'package:provider/provider.dart';
 import './screens/places_list_screen.dart';
+import './screens/add_place_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
           ),
           themeMode: ThemeMode.system,
           home: const PlacesListScreen(),
+          routes: {
+            AddPlaceScreen.routeName: (context) => const AddPlaceScreen(),
+          },
         ),
       );
     });
