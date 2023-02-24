@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import '../helpers/location_helper.dart';
+import '../screens/map_screen.dart';
 
 class LocationInput extends StatefulWidget {
   const LocationInput({super.key});
@@ -13,7 +15,24 @@ class _LocationInputState extends State<LocationInput> {
 
   Future<void> _getCurrentUserLocation() async {
     final location = await Location().getLocation();
-    print("Location: ${location.latitude}, ${location.longitude}");
+    final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
+        latitude: location.latitude!, longitude: location.longitude!);
+    setState(() {
+      _previewImageUrl = staticMapImageUrl;
+    });
+  }
+
+  Future<void> _selectOnMap() async {
+    final selectedLocation = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MapScreen(
+          isSelecting: true,
+        ),
+      ),
+    );
+    if (selectedLocation == null) {
+      return;
+    }
   }
 
   @override
@@ -33,10 +52,13 @@ class _LocationInputState extends State<LocationInput> {
                   'No location chosen',
                   textAlign: TextAlign.center,
                 )
-              : Image.network(
-                  _previewImageUrl!,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    _previewImageUrl!,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
                 ),
         ),
         Row(
@@ -48,7 +70,7 @@ class _LocationInputState extends State<LocationInput> {
               label: const Text('Current location'),
             ),
             TextButton.icon(
-              onPressed: () {},
+              onPressed: _selectOnMap,
               icon: const Icon(Icons.map),
               label: const Text('Select on map'),
             ),
