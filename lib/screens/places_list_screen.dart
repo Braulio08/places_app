@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../screens/add_place_screen.dart';
 import '../providers/places_provider.dart';
+import '../screens/place_detail_screen.dart';
 
 class PlacesListScreen extends StatelessWidget {
   const PlacesListScreen({super.key});
@@ -43,9 +44,13 @@ class PlacesListScreen extends StatelessWidget {
                                 FileImage(placesProvider.items[index].image),
                           ),
                           title: Text(placesProvider.items[index].title),
-                          onTap: () {
-                            //TODO: go to detail page
-                          },
+                          subtitle: Text(
+                            placesProvider.items[index].location!.address
+                                .toString(),
+                          ),
+                          onTap: () => Navigator.of(context).pushNamed(
+                              PlaceDetailsScreen.routeName,
+                              arguments: placesProvider.items[index]),
                         ),
                       ),
               ),

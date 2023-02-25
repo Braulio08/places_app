@@ -38,7 +38,7 @@ class _ImageInputState extends State<ImageInput> {
       children: [
         Container(
           width: 200,
-          height: 100,
+          height: 200,
           decoration: BoxDecoration(
             border: Border.all(width: 1),
             borderRadius: BorderRadius.circular(10),
